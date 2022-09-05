@@ -169,6 +169,13 @@ select {
 
 /* Footer */
 .fine-print {
-    display: block;
+    display: none;
     font-size: 0.7em;
+}
+
+.refresh-btn {
+    display: none;
+    background: #eee;
+    padding: 1.3em;
+    margin: 0 auto;
 }
