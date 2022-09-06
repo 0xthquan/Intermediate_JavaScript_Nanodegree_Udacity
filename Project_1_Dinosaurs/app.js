@@ -86,8 +86,8 @@ function Dino(dinoData) {
 
 // Create Dino Objects
 function createDinoArray() {
-    let dinoArray = [];
-    dinos.forEach(function (dino) {
+    const dinoArray = [];
+    dinos.forEach((dino) => {
         dinoArray.push(new Dino(dino));
     });
 
@@ -96,40 +96,41 @@ function createDinoArray() {
 
 // Create Human Object
 const humanObject = {};
-const getHumanData = function () {
+function getHumanData() {
     humanObject.name = document.getElementById('name').value;
     humanObject.height =
-        Number(document.getElementById('feet').value * 12) + Number(document.getElementById('inches').value);
+        Number(document.getElementById('feet').value * 12) +
+        Number(document.getElementById('inches').value);
     humanObject.weight = document.getElementById('weight').value;
     humanObject.diet = document.getElementById('diet').value;
-};
+}
 
 // Create Dino Compare Method
 // NOTE: Weight in JSON file is in lbs, height in inches.
 const prototypeDino = {
-    compareHeight: function () {
+    compareHeight() {
         const heightRatio = (this.height / humanObject.height).toFixed(2);
         return `${this.species} is ${heightRatio} times as tall as you are`;
     },
 
-    compareWeight: function () {
+    compareWeight() {
         const weightRatio = (this.weight / humanObject.weight).toFixed(2);
         return `${this.species} is ${weightRatio} times as weight as you are`;
     },
 
-    compareDiet: function () {
+    compareDiet() {
         if (this.diet === humanObject.diet.toLowerCase()) {
             return `You and ${this.species} are the ${this.diet}`;
-        } else {
-            return `You are the ${humanObject.diet} and ${this.species} is the ${this.diet}`;
         }
+        return `You are the ${humanObject.diet} and ${this.species} is the ${this.diet}`;
     },
 };
 Dino.prototype = prototypeDino;
 
 // Generate Tiles for each Dino in Array
-function createElementDino(dinoData, humanData) {
-    const randomNumber = dinoData.species === 'Pigeon' ? 0 : Math.ceil(Math.random() * 5);
+function createElementDino(dinoData) {
+    const randomNumber =
+        dinoData.species === 'Pigeon' ? 0 : Math.ceil(Math.random() * 5);
 
     let fact;
     switch (randomNumber) {
@@ -165,7 +166,9 @@ function createElementDino(dinoData, humanData) {
     newDiv.className = 'grid-item';
     newDiv.innerHTML = `<h3>${
         dinoData.species
-    }</h3><img src="images/${dinoData.species.toLowerCase()}.png" alt="image of ${dinoData.species}"><p>${fact}</p>`;
+    }</h3><img src="images/${dinoData.species.toLowerCase()}.png" alt="image of ${
+        dinoData.species
+    }"><p>${fact}</p>`;
 
     return newDiv;
 }
@@ -173,15 +176,33 @@ function createElementDino(dinoData, humanData) {
 function createHumanElement(humanData) {
     const newDiv = document.createElement('div');
     newDiv.className = 'grid-item';
-    newDiv.innerHTML = `<h3>${humanData.name}</h3><img src="images/human.png" alt="image of human">`;
+    newDiv.innerHTML = `<h3>${humanData.name}</h3><img src="images/human.png" alt="image of human"><p> Height: ${humanObject.height} inches, Weight: ${humanObject.weight} pounds, Diet: ${humanObject.diet}</p>`;
 
     return newDiv;
+}
+
+function updateUI(dinoArray, humanData) {
+    document.getElementById('dino-compare').style.display = 'none';
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < dinoArray.length; i += 1) {
+        // 5th element, index 4 is always the human
+        const gridSquare =
+            i === 4
+                ? createHumanElement(humanData)
+                : createElementDino(dinoArray[i], humanData);
+
+        fragment.appendChild(gridSquare);
+    }
+    document.getElementById('grid').appendChild(fragment);
+    document.getElementById('refresh-btn').style.display = 'block';
 }
 
 // On button click, prepare and display infographic
 function actionCompare() {
     getHumanData();
-    let dinoArray = createDinoArray();
+    const dinoArray = createDinoArray();
     dinoArray.splice(4, 0, 'human');
     updateUI(dinoArray, humanObject);
 }
@@ -197,22 +218,7 @@ function refresh() {
     document.getElementById('diet').value = 'Herbivore';
 }
 
-function updateUI(dinoArray, humanData) {
-    document.getElementById('dino-compare').style.display = 'none';
-
-    const fragment = document.createDocumentFragment();
-
-    for (let i = 0; i < dinoArray.length; i++) {
-        // 5th element, index 4 is always the human
-        let gridSquare = i === 4 ? createHumanElement(humanData) : createElementDino(dinoArray[i], humanData);
-
-        fragment.appendChild(gridSquare);
-    }
-    document.getElementById('grid').appendChild(fragment);
-    document.getElementById('refresh-btn').style.display = 'block';
-}
-
 (function () {
     document.getElementById('btn').addEventListener('click', actionCompare);
     document.getElementById('refresh-btn').addEventListener('click', refresh);
-})();
+}());
