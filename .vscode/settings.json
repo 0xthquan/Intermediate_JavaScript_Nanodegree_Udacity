@@ -1,0 +1,12 @@
+{
+    "editor.wordWrapColumn": 80,
+    "html.format.maxPreserveNewLines": null,
+    "[javascript]": {
+        "editor.minimap.maxColumn": 120
+    },
+    "editor.wordWrap": "off",
+    "prettier.proseWrap": "preserve",
+    "editor.cursorWidth": 0,
+    "diffEditor.wordWrap": "inherit",
+    "editor.minimap.maxColumn": 120
+}
