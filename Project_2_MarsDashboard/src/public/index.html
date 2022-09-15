@@ -6,12 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.8.2/immutable.min.js"></script>
+    <link rel="stylesheet" href="./assets/stylesheets/index.css">
 </head>
 
 <body>
     <main>
+        <h1 style="color: white;">Mars Dashboard</h1>
+        <div class="tab-container">
+            <div class="tab active" id="curiosity">CURIOSITY</div>
+            <div class="tab" id="opportunity">OPPORTUNITY</div>
+            <div class="tab" id="spirit">SPIRIT</div>
+        </div>
+        <h1 style="color: white;" id="loading-section">Loading...</h1>
         <div id="root">
-            <h1>Loading...</h1>
         </div>
     </main>
 </body>
