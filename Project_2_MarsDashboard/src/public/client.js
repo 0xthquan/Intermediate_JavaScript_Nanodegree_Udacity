@@ -15,12 +15,11 @@ const updateStore = (state, newState) => {
     render(root, store);
 };
 
-const render = async (root, state) => {
+const render = (root, state) => {
     root.innerHTML = App(state, renderRoverInfo, renderRoverPhoto);
 };
 
-const renderRoverInfo = (roverInfo) => {
-    return ` 
+const renderRoverInfo = (roverInfo) => ` 
         <figure>
             <img src="./assets/images/${roverInfo.name.toLowerCase()}.jpeg" class="main-rover-img"/>
             <p><strong>Rover name:</strong> ${roverInfo.name}</p>
@@ -29,11 +28,10 @@ const renderRoverInfo = (roverInfo) => {
             <p><strong>Status:</strong> ${roverInfo.status}</p>
         </figure>
     `;
-};
 
 const renderRoverPhoto = (roverPhotos) => {
     let renderPhoto =
-        '<div class = "header"><h1> Most recently available photos </h1></div>';
+        '<div class = "header">Most recently available photos</div>';
     roverPhotos.forEach((photo, index) => {
         if (index > 2) {
             return;
@@ -54,13 +52,15 @@ const renderRoverPhoto = (roverPhotos) => {
 // create content
 const App = (state, renderRoverInfo, renderRoverPhoto) => {
     const { roverImages } = state.toJS();
-    const images = roverImages.map((image) => {
-        return {
-            earth_date: image.earth_date,
-            img_src: image.img_src,
-            sol: image.sol,
-        };
-    });
+    return renderUI(roverImages, renderRoverInfo, renderRoverPhoto);
+};
+
+const renderUI = (roverImages, renderRoverInfo, renderRoverPhoto) => {
+    const images = roverImages.map((image) => ({
+        earth_date: image.earth_date,
+        img_src: image.img_src,
+        sol: image.sol,
+    }));
     showLoading(false);
     return `
         <div>
@@ -78,10 +78,14 @@ function changeRover() {
     const listTab = document.querySelectorAll('.tab');
     listTab.forEach((tab) => {
         tab.addEventListener('click', async () => {
-            showLoading(true);
-            const currentTab = tab;
-            activeTab(listTab, currentTab);
-            await getRoverImages(currentTab.id);
+            try {
+                showLoading(true);
+                const currentTab = tab;
+                activeTab(listTab, currentTab);
+                await getRoverImages(currentTab.id);
+            } catch (error) {
+                console.log(error);
+            }
         });
     });
 }
@@ -105,9 +109,13 @@ const showLoading = (isLoading) => {
 
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', async () => {
-    changeRover();
-    showLoading(true);
-    await getRoverImages('curiosity');
+    try {
+        changeRover();
+        showLoading(true);
+        await getRoverImages('curiosity');
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 // ------------------------------------------------------  COMPONENTS
@@ -115,11 +123,15 @@ window.addEventListener('load', async () => {
 // ------------------------------------------------------  API CALLS
 
 const getRoverImages = async (roverName) => {
-    const response = await fetch(
-        `http://localhost:3000/roverPhoto/${roverName}`
-    );
-    const roverData = await response.json();
-    const roverImages = roverData.latest_photos;
-    const newState = { roverImages };
-    updateStore(store, newState);
+    try {
+        const response = await fetch(
+            `http://localhost:3000/roverPhoto/${roverName}`
+        );
+        const roverData = await response.json();
+        const roverImages = roverData.latest_photos;
+        const newState = { roverImages };
+        updateStore(store, newState);
+    } catch (error) {
+        console.log(error);
+    }
 };
