@@ -26,6 +26,13 @@ To run the server, locate your operating system and run the associated command i
 | Windows               | `ORIGIN_ALLOWED=http://localhost:3000 ./bin/server.exe`   |
 | Linux (Ubuntu, etc..) | `ORIGIN_ALLOWED=http://localhost:3000 ./bin/server-linux` |
 
+#### WINDOWS USERS -- Setting Environment Variables
+If you are using a windows machine:
+1. `cd` into the root of the project containing data.json 
+2. Run the following command to add the environment variable:
+```set DATA_FILE=./data.json```
+
+#### Start front end
 Note that this process will use your terminal tab, so you will have to open a new tab terminal and navigate back to the project root to start the front end by run
 
     npm install
@@ -35,12 +42,6 @@ Note that this process will use your terminal tab, so you will have to open a ne
 Access url
 
     http://localhost:3000/
-
-#### WINDOWS USERS -- Setting Environment Variables
-If you are using a windows machine:
-1. `cd` into the root of the project containing data.json 
-2. Run the following command to add the environment variable:
-```set DATA_FILE=./data.json```
 
 ### Demo
 ![](Demo/demo1.png)
