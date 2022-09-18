@@ -3,7 +3,7 @@
 // const { json } = require('body-parser');
 
 // The store will hold all information needed globally
-let store = {
+const store = {
     track_id: undefined,
     player_id: undefined,
     race_id: undefined,
@@ -55,7 +55,9 @@ function setupClickHandlers() {
 				if (store.track_id && store.player_id) {
 					// start race
 					handleCreateRace();
-				}
+				} else {
+                    alert('Please choose your track and your racer');
+                }
             }
 
             // Handle acceleration click
@@ -79,8 +81,6 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
-    
-
     // TODO - Get player_id and track_id from the store
     const playerId = store.player_id;
     const trackId = store.track_id;
@@ -299,7 +299,7 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-    let userPlayer = positions.find((e) => e.id === store.player_id);
+    const userPlayer = positions.find((e) => e.id === store.player_id);
     userPlayer.driver_name += ' (you)';
 
     positions = positions.sort((a, b) => (a.segment > b.segment ? -1 : 1));
@@ -313,7 +313,7 @@ function raceProgress(positions) {
 				</td>
 			</tr>
 		`;
-    });
+    }).join('');
 
     return `
 		<main>
